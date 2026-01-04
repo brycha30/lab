@@ -1,0 +1,189 @@
+services:
+  gluetun:
+    image: qmcgaw/gluetun:latest
+    container_name: gluetun
+    cap_add:
+      - NET_ADMIN
+    devices:
+      - /dev/net/tun:/dev/net/tun
+    environment:
+      - TZ=${TZ}
+
+      # ---- WireGuard (Mullvad) ----
+      - VPN_SERVICE_PROVIDER=${VPN_SERVICE_PROVIDER}
+      - VPN_TYPE=${VPN_TYPE}
+      - WIREGUARD_PRIVATE_KEY=${WIREGUARD_PRIVATE_KEY}
+      - WIREGUARD_ADDRESSES=${WIREGUARD_ADDRESSES}
+      - WIREGUARD_ENDPOINT_IP=${WIREGUARD_ENDPOINT_IP}
+      - WIREGUARD_ENDPOINT_PORT=${WIREGUARD_ENDPOINT_PORT}
+      - DNS_ADDRESS=${DNS_ADDRESS}
+      - WIREGUARD_PUBLIC_KEY=${WIREGUARD_PUBLIC_KEY}
+
+      # ---- Allow LAN + NAS subnets to reach published WebUIs ----
+      - FIREWALL_OUTBOUND_SUBNETS=${FIREWALL_OUTBOUND_SUBNETS}
+      # Optional explicit inbound allowlist (safe + clear)
+      - FIREWALL_INPUT_PORTS=${FIREWALL_INPUT_PORTS}
+
+    ports:
+      # WebUIs
+      - "8080:8080"     # qB
+      - "9696:9696"     # Prowlarr
+      - "8989:8989"     # Sonarr
+      - "7878:7878"     # Radarr
+      - "7879:7879"     # Radarr-kids
+      - "7880:7880"     # Radarr-directors (movies-directors)
+      - "6767:6767"     # Bazarr
+      - "6768:6768"     # Bazarr-kids
+      - "8191:8191"     # FlareSolverr
+
+      # qB incoming (match qB settings)
+      - "6881:6881"        # TCP
+      - "6881:6881/udp"    # UDP
+
+    volumes:
+      - /opt/dkr/config/gluetun:/gluetun
+    restart: unless-stopped
+
+  qbittorrent:
+    image: lscr.io/linuxserver/qbittorrent:latest
+    container_name: qbittorrent
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - WEBUI_PORT=8080
+    volumes:
+      - /opt/dkr/config/qbittorrent:/config
+      - ${MAIN}:/Main
+      - ${MAIN}:/KidsMain
+      - ${MAIN}:/DirMain
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  sonarr:
+    image: lscr.io/linuxserver/sonarr:latest
+    container_name: sonarr
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /opt/dkr/config/sonarr:/config
+      - ${MAIN}:/Main
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  radarr:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - RADARR__SERVER__PORT=7878
+    volumes:
+      - /opt/dkr/config/radarr:/config
+      - ${MAIN}:/Main
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  radarr-kids:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr-kids
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - RADARR__SERVER__PORT=7879
+    volumes:
+      - /opt/dkr/config/radarr-kids:/config
+      - ${MAIN}:/KidsMain
+      - ${MAIN}:/Main
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  radarr-directors:
+    image: lscr.io/linuxserver/radarr:latest
+    container_name: radarr-directors
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - RADARR__SERVER__PORT=7880
+    volumes:
+      - /opt/dkr/config/radarr-directors:/config
+      - ${MAIN}:/DirMain
+      - ${MAIN}:/Main
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  prowlarr:
+    image: lscr.io/linuxserver/prowlarr:latest
+    container_name: prowlarr
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+    volumes:
+      - /opt/dkr/config/prowlarr:/config
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  flaresolverr:
+    image: ghcr.io/flaresolverr/flaresolverr:latest
+    container_name: flaresolverr
+    network_mode: "service:gluetun"
+    environment:
+      - TZ=${TZ}
+      - LOG_LEVEL=info
+      - LOG_HTML=false
+      - CAPTCHA_SOLVER=none
+    volumes:
+      - /opt/dkr/config/flaresolver:/config
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  bazarr:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - BAZARR__PORT=6767
+    volumes:
+      - /opt/dkr/config/bazarr:/config
+      - ${MAIN}:/Main
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  bazarr-kids:
+    image: lscr.io/linuxserver/bazarr:latest
+    container_name: bazarr-kids
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - BAZARR__PORT=6768
+    volumes:
+      - /opt/dkr/config/bazarr-kids:/config
+      - ${MAIN}:/KidsMain
+    restart: unless-stopped
+    depends_on:
+      - gluetun

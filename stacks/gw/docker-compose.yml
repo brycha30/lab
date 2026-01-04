@@ -1,0 +1,45 @@
+services:
+  caddy:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: caddy-cloudflare
+    container_name: caddy
+    restart: unless-stopped
+    network_mode: host
+    volumes:
+      - /opt/dkr/config/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - caddy_data:/data
+      - caddy_config:/config
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+
+  dashy:
+    container_name: Dashy
+    networks:
+      - caddynet
+    image: lissy93/dashy
+    ports:
+      - 4000:8080
+    volumes:
+      - /opt/dkr/config/dashy/conf.yml:/app/user-data/conf.yml:ro
+      - /opt/dkr/config/dashy/custom.css:/app/user-data/custom.css:ro
+      - /opt/dkr/config/dashy/icons:/app/public/icons:ro
+      - /opt/dkr/config/dashy/ffslogo.png:/app/public/ffslogo.png:ro
+    environment:
+      - NODE_ENV=production
+    restart: unless-stopped
+    healthcheck:
+      test: ['CMD', 'node', '/app/services/healthcheck']
+      interval: 1m30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  caddynet:
+    driver: bridge
+
+volumes:
+  caddy_data:
+  caddy_config:

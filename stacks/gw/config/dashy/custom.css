@@ -1,0 +1,189 @@
+/* ============================================================
+   FFS Branded Dashy Theme (Blue + Professional)
+   ============================================================ */
+
+/* --- Brand palette --- */
+:root {
+  --ffs-blue: #2F6FED;
+  --ffs-blue-2: #3B82F6;
+  --bg-1: #0B1220;
+  --bg-2: #0A1020;
+  --card: rgba(255,255,255,0.08);
+  --card-2: rgba(255,255,255,0.12);
+  --border: rgba(255,255,255,0.10);
+  --text: #EAF1FF;
+  --muted: rgba(234,241,255,0.75);
+}
+
+/* --- Page background --- */
+body {
+  background:
+    radial-gradient(1200px 600px at 15% 5%, rgba(47,111,237,0.25), transparent 60%),
+    radial-gradient(900px 500px at 85% 10%, rgba(59,130,246,0.18), transparent 55%),
+    radial-gradient(900px 600px at 50% 95%, rgba(59,130,246,0.12), transparent 60%),
+    linear-gradient(180deg, var(--bg-1), var(--bg-2));
+  color: var(--text);
+  font-family: "Inter", "Segoe UI", Roboto, system-ui, -apple-system, sans-serif;
+}
+
+/* --- Top header bar (make it feel like a product) --- */
+header,
+.navbar,
+.top-bar {
+  background: linear-gradient(90deg, rgba(47,111,237,0.95), rgba(59,130,246,0.85)) !important;
+  box-shadow: 0 10px 30px rgba(0,0,0,0.35);
+  border-bottom: 1px solid rgba(255,255,255,0.15);
+}
+
+/* Title styling */
+header h1, .title, .app-title {
+  letter-spacing: 0.4px;
+  font-weight: 700;
+  color: #ffffff !important;
+}
+
+/* --- Search box nicer --- */
+.search input, input[type="search"] {
+  border-radius: 12px !important;
+  background: rgba(255,255,255,0.14) !important;
+  border: 1px solid rgba(255,255,255,0.18) !important;
+  color: #fff !important;
+  box-shadow: inset 0 1px 0 rgba(255,255,255,0.10);
+}
+
+.search input::placeholder {
+  color: rgba(255,255,255,0.75);
+}
+
+/* --- Sections become glassy panels --- */
+.section {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  padding: 14px 14px 10px 14px;
+  box-shadow: 0 16px 40px rgba(0,0,0,0.35);
+  backdrop-filter: blur(10px);
+}
+
+/* Section title row */
+.section-title {
+  font-weight: 700;
+  letter-spacing: 0.3px;
+  color: var(--text);
+}
+
+/* --- Cards (items) --- */
+.item {
+  background: var(--card);
+  border: 1px solid rgba(255,255,255,0.10);
+  border-radius: 16px;
+  transition: transform 0.16s ease, box-shadow 0.16s ease, background 0.16s ease, border-color 0.16s ease;
+  box-shadow:
+    0 10px 20px rgba(0,0,0,0.20),
+    inset 0 1px 0 rgba(255,255,255,0.08);
+}
+
+/* Hover = premium lift */
+.item:hover {
+  transform: translateY(-3px);
+  background: var(--card-2);
+  border-color: rgba(255,255,255,0.20);
+  box-shadow:
+    0 18px 36px rgba(0,0,0,0.35),
+    0 0 0 2px rgba(59,130,246,0.20);
+}
+
+/* Item title */
+.item-title {
+  font-weight: 600;
+  color: var(--text);
+}
+
+/* Optional description styling if you add them later */
+.item-subtitle, .item-description {
+  color: var(--muted);
+}
+
+/* --- Icon styling (clean + consistent) --- */
+.item-icon img {
+  width: 42px !important;
+  height: 42px !important;
+  object-fit: contain;
+  border-radius: 10px;
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.10);
+  padding: 6px;
+  box-shadow: 0 8px 18px rgba(0,0,0,0.25);
+}
+
+/* --- Footer subtle --- */
+footer {
+  opacity: 0.65;
+}
+/* ============================================================
+   Layout tightening + bigger logo + background watermark
+   ============================================================ */
+
+/* --- 1) Tighten spacing between sections/columns --- */
+
+/* Reduce overall page padding a bit */
+.page-container, .main, main {
+  padding-left: 18px !important;
+  padding-right: 18px !important;
+}
+
+/* Reduce gap between columns/sections (Dashy uses different wrappers by theme/version) */
+.sections, .sections-container, .section-group, .section-wrapper {
+  gap: 16px !important;
+}
+
+/* Reduce the "breathing room" inside each section a bit */
+.section {
+  padding: 12px 12px 8px 12px !important;
+}
+
+/* Reduce spacing between tiles within a section */
+.items, .item-grid, .item-group {
+  gap: 10px !important;
+}
+
+
+/* --- 2) Make the FFS logo bigger in the header --- */
+/* Dashy header icon often renders as an img in the header/title area */
+header img, .navbar img, .top-bar img {
+  max-height: 44px !important;   /* adjust: 44–60 looks good */
+  width: auto !important;
+}
+
+/* If your logo is specifically the "app icon" next to the title */
+.app-icon img, .title img, .app-title img {
+  height: 48px !important;       /* adjust as you like */
+  width: auto !important;
+}
+
+
+/* --- 3) Big transparent watermark logo in the main area --- */
+/* Put your logo behind everything in the content area */
+.page-container, .main, main {
+  position: relative !important;
+}
+
+.page-container::before, .main::before, main::before {
+  content: "";
+  position: fixed;               /* stays centered even if you scroll */
+  inset: 0;
+  background-image: url("https://lan.md-chamberlain.com/ffslogo.png");
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: min(70vw, 700px);
+  opacity: 0.05;                 /* 0.03–0.08 is the sweet spot */
+  pointer-events: none;
+  z-index: 0;
+  filter: grayscale(100%);
+}
+
+/* Ensure the real UI sits above the watermark */
+.page-container > *, .main > *, main > * {
+  position: relative;
+  z-index: 1;
+}

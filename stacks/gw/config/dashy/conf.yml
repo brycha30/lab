@@ -1,0 +1,110 @@
+pageInfo:
+  title: "MD-Chamberlain LAN"
+  description: ""
+  navLinks: []
+  footerText: ""
+  logo: "https://lan.md-chamberlain.com/ffslogo.png"
+  favicon: "https://lan.md-chamberlain.com/ffslogo.png"
+
+appConfig:
+  title: "MD-Chamberlain LAN"
+  theme: "material"
+  layout: "auto"
+  icon: "https://lan.md-chamberlain.com/ffslogo.png"
+  favicon: "https://lan.md-chamberlain.com/ffslogo.png"
+  customCss: "/app/user-data/custom.css"
+
+sections:
+  - name: "Internal Services"
+    icon: "fas fa-network-wired"
+    items:
+      - title: "OPNsense"
+        url: "https://opnsense.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/opnsense.jpg"
+
+      - title: "Invoice Ninja"
+        url: "https://invoice.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/invoice-ninja-420x320-20201016.png"
+
+      - title: "Plex"
+        url: "https://plex.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/plex.jpg"
+
+  - name: "External Links"
+    icon: "fas fa-external-link-alt"
+    items:
+      - title: "FFS Lawn Care"
+        url: "https://ffslawncare.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/ffs-lawncare.png"
+
+      - title: "Family Forever Solutions"
+        url: "https://familyforeversolutions.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/ffslogo.png"
+
+      - title: "Zoho Mail"
+        url: "https://mail.zoho.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/zoho.jpg"
+
+      - title: "Hostinger"
+        url: "https://hostinger.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/hostinger-logo-freelogovectors.net_.png"
+
+      - title: "PenFed"
+        url: "https://penfed.org/"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/penfed.png"
+
+  - name: "Media Stack"
+    icon: "fas fa-server"
+    items:
+      - title: "qBittorrent"
+        url: "https://qb.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/qbittorrent.png"
+
+      - title: "Prowlarr"
+        url: "https://prowlarr.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/prowlarr.png"
+
+      - title: "Radarr"
+        url: "https://radarr.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/radarr-icon-1845x2048-97le6lim.png"
+
+      - title: "Radarr-Kids"
+        url: "https://radarr-kids.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/radarr-kids.png"
+
+      - title: "Radarr-Directors"
+        url: "https://radarr-directors.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/radarr-icon-1845x2048-97le6lim.png"
+
+      - title: "Sonarr"
+        url: "https://sonarr.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/sonarr-icon-1024x1024-wkay604k.png"
+
+      - title: "Bazarr"
+        url: "https://bazarr.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/bazarr.jpg"
+
+      - title: "Bazarr-Kids"
+        url: "https://bazarr-kids.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/bazarr.jpg"
+
+      - title: "FlareSolverr"
+        url: "https://flaresolverr.md-chamberlain.com"
+        target: newtab
+        icon: "https://lan.md-chamberlain.com/icons/firefox-logo-png-transparent.png"
