@@ -18,3 +18,7 @@ exports/
 .DS_Store
 *.swp
 *~
+
+# Live Dashy config (local runtime; do not commit)
+stacks/gw/config/dashy/conf.yml
+stacks/gw/config/dashy/custom.css
