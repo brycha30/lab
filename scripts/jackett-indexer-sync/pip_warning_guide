@@ -1,0 +1,69 @@
+# Python Environment & Package Management in Docker LXC (Debian 12)
+
+This guide documents how we configured Python inside a Docker LXC container running on Debian 12, including the use of `pip` as `root`, best practices, and how to document dependencies.
+
+---
+
+## ✅ Current Environment
+
+- **Python version:** 3.11.2
+- **pip version:** Installed using `apt install python3-pip`
+- **Installed Package:** `python-dotenv` via `pip3 install python-dotenv`
+- **Note:** Installed as `root`
+
+---
+
+## ⚠️ About the Root Warning
+
+You may see a warning like this:
+
+```
+WARNING: Running pip as the 'root' user can result in broken permissions and conflicting behaviour with the system package manager. It is recommended to use a virtual environment instead
+```
+
+### Should You Worry?
+- Since this is a self-contained Docker LXC container used for automation scripts, running pip as root **is acceptable**.
+- If you were building a development environment or deploying system-wide Python software, a virtual environment would be strongly recommended.
+
+**✅ Conclusion:** In this case, the warning can be safely ignored.
+
+---
+
+## 📦 Managing Python Dependencies
+
+### Create a `requirements.txt`
+To track your installed Python packages, run:
+
+```bash
+pip3 freeze > requirements.txt
+```
+
+This will generate a file like:
+
+```text
+python-dotenv==1.1.0
+```
+
+### Install from `requirements.txt` in future rebuilds:
+
+```bash
+pip3 install -r requirements.txt
+```
+
+---
+
+## 🗂️ GitHub Integration
+You can push your scripts and this documentation into a new GitHub repo.
+
+Example structure:
+
+```
+scripts/
+├── add-jackett-indexers.py
+├── .env.indexers
+├── requirements.txt
+└── README.md
+```
+
+Let me know and I can generate the `README.md` content and `.gitignore` for the scripts repo too.
+

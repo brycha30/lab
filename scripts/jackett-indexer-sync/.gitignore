@@ -1,0 +1,3 @@
+.env.indexers
+*.log
+__pycache__/
