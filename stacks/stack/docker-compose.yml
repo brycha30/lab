@@ -41,7 +41,7 @@ services:
       - "6881:6881/udp"    # UDP
 
     volumes:
-      - /opt/dkr/config/gluetun:/gluetun
+      - ${CONFIG_ROOT}/gluetun:/gluetun
     restart: unless-stopped
 
   qbittorrent:
@@ -54,7 +54,7 @@ services:
       - TZ=${TZ}
       - WEBUI_PORT=8080
     volumes:
-      - /opt/dkr/config/qbittorrent:/config
+      - ${CONFIG_ROOT}/qbittorrent:/config
       - ${MAIN}:/Main
       - ${MAIN}:/KidsMain
       - ${MAIN}:/DirMain
@@ -71,7 +71,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /opt/dkr/config/sonarr:/config
+      - ${CONFIG_ROOT}/sonarr:/config
       - ${MAIN}:/Main
     restart: unless-stopped
     depends_on:
@@ -87,7 +87,7 @@ services:
       - TZ=${TZ}
       - RADARR__SERVER__PORT=7878
     volumes:
-      - /opt/dkr/config/radarr:/config
+      - ${CONFIG_ROOT}/radarr:/config
       - ${MAIN}:/Main
     restart: unless-stopped
     depends_on:
@@ -103,7 +103,7 @@ services:
       - TZ=${TZ}
       - RADARR__SERVER__PORT=7879
     volumes:
-      - /opt/dkr/config/radarr-kids:/config
+      - ${CONFIG_ROOT}/radarr-kids:/config
       - ${MAIN}:/KidsMain
       - ${MAIN}:/Main
     restart: unless-stopped
@@ -120,7 +120,7 @@ services:
       - TZ=${TZ}
       - RADARR__SERVER__PORT=7880
     volumes:
-      - /opt/dkr/config/radarr-directors:/config
+      - ${CONFIG_ROOT}/radarr-directors:/config
       - ${MAIN}:/DirMain
       - ${MAIN}:/Main
     restart: unless-stopped
@@ -136,7 +136,7 @@ services:
       - PGID=${PGID}
       - TZ=${TZ}
     volumes:
-      - /opt/dkr/config/prowlarr:/config
+      - ${CONFIG_ROOT}/prowlarr:/config
     restart: unless-stopped
     depends_on:
       - gluetun
@@ -151,7 +151,7 @@ services:
       - LOG_HTML=false
       - CAPTCHA_SOLVER=none
     volumes:
-      - /opt/dkr/config/flaresolver:/config
+      - ${CONFIG_ROOT}/flaresolver:/config
     restart: unless-stopped
     depends_on:
       - gluetun
@@ -166,7 +166,7 @@ services:
       - TZ=${TZ}
       - BAZARR__PORT=6767
     volumes:
-      - /opt/dkr/config/bazarr:/config
+      - ${CONFIG_ROOT}/bazarr:/config
       - ${MAIN}:/Main
     restart: unless-stopped
     depends_on:
@@ -182,7 +182,7 @@ services:
       - TZ=${TZ}
       - BAZARR__PORT=6768
     volumes:
-      - /opt/dkr/config/bazarr-kids:/config
+      - ${CONFIG_ROOT}/bazarr-kids:/config
       - ${MAIN}:/KidsMain
     restart: unless-stopped
     depends_on:

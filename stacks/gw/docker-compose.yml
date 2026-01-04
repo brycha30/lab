@@ -8,7 +8,7 @@ services:
     restart: unless-stopped
     network_mode: host
     volumes:
-      - /opt/dkr/config/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ${CONFIG_ROOT}/caddy/Caddyfile:/etc/caddy/Caddyfile
       - caddy_data:/data
       - caddy_config:/config
     environment:
@@ -22,10 +22,10 @@ services:
     ports:
       - 4000:8080
     volumes:
-      - /opt/dkr/config/dashy/conf.yml:/app/user-data/conf.yml:ro
-      - /opt/dkr/config/dashy/custom.css:/app/user-data/custom.css:ro
-      - /opt/dkr/config/dashy/icons:/app/public/icons:ro
-      - /opt/dkr/config/dashy/ffslogo.png:/app/public/ffslogo.png:ro
+      - ${CONFIG_ROOT}/dashy/conf.yml:/app/user-data/conf.yml:ro
+      - ${CONFIG_ROOT}/dashy/custom.css:/app/user-data/custom.css:ro
+      - ${CONFIG_ROOT}/dashy/icons:/app/public/icons:ro
+      - ${CONFIG_ROOT}/dashy/ffslogo.png:/app/public/ffslogo.png:ro
     environment:
       - NODE_ENV=production
     restart: unless-stopped

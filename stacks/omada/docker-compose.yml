@@ -15,6 +15,6 @@ services:
       - "29813:29813/tcp"
       - "29814:29814/tcp"
     volumes:
-      - /opt/dkr/config/omada/data:/opt/tplink/EAPController/data
-      - /opt/dkr/config/omada/logs:/opt/tplink/EAPController/logs
-      - /opt/dkr/config/omada/work:/opt/tplink/EAPController/work
+      - ${CONFIG_ROOT}/omada/data:/opt/tplink/EAPController/data
+      - ${CONFIG_ROOT}/omada/logs:/opt/tplink/EAPController/logs
+      - ${CONFIG_ROOT}/omada/work:/opt/tplink/EAPController/work
