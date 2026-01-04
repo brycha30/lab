@@ -1,7 +1,6 @@
 services:
   omada:
     image: mbentley/omada-controller:latest
-    container_name: omada
 #    network_mode: host
     restart: unless-stopped
     environment:

@@ -4,7 +4,6 @@ services:
       context: .
       dockerfile: Dockerfile
     image: caddy-cloudflare
-    container_name: caddy
     restart: unless-stopped
     network_mode: host
     volumes:
@@ -15,7 +14,6 @@ services:
       - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
 
   dashy:
-    container_name: Dashy
     networks:
       - caddynet
     image: lissy93/dashy
