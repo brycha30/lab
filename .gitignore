@@ -22,3 +22,6 @@ exports/
 # Live Dashy config (local runtime; do not commit)
 stacks/gw/config/dashy/conf.yml
 stacks/gw/config/dashy/custom.css
+
+# Live Dashy config/icons should not be tracked (use examples/)
+stacks/gw/config/dashy/
