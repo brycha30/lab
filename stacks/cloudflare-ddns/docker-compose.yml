@@ -1,0 +1,25 @@
+services:
+  cloudflare-ddns:
+    image: oznu/cloudflare-ddns
+    restart: always
+    environment:
+      - API_KEY=${CF_API_KEY}
+      - ZONE=${CF_ZONE}
+      - SUBDOMAIN=${CF_SUBDOMAIN}
+      - PROXIED=${CF_PROXIED}
+
+  caddy:
+    image: caddy-cloudflare
+    restart: unless-stopped
+    ports:
+      - "443:443"
+    volumes:
+      - ${CONFIG_ROOT}/caddy/Caddyfile:/etc/caddy/Caddyfile
+      - ./caddy_data:/data
+      - ./caddy_config:/config
+    environment:
+      - CLOUDFLARE_API_TOKEN=${CLOUDFLARE_API_TOKEN}
+
+volumes:
+  caddy_data:
+  caddy_config:

@@ -25,3 +25,11 @@ stacks/gw/config/dashy/custom.css
 
 # Live Dashy config/icons should not be tracked (use examples/)
 stacks/gw/config/dashy/
+
+# Never commit real env files
+.env
+.env.*
+
+# Cloudflare DDNS runtime data
+stacks/cloudflare-ddns/caddy_data/
+stacks/cloudflare-ddns/caddy_config/

@@ -1,0 +1,107 @@
+# ========== GLOBAL MATCHERS ==========
+
+(local_only_http) {
+    @localOnly {
+        remote_ip 192.168.1.0/24 10.0.0.0/8 ::1
+    }
+
+    handle @localOnly {
+        reverse_proxy {args[0]}
+    }
+
+    handle {
+        respond "403 Forbidden" 403
+    }
+}
+
+(local_only_https) {
+    @localOnly {
+        remote_ip 192.168.1.0/24 10.0.0.0/8 ::1
+    }
+
+    handle @localOnly {
+        reverse_proxy {args[0]} {
+            transport http {
+                tls_insecure_skip_verify
+            }
+        }
+    }
+
+    handle {
+        respond "403 Forbidden" 403
+    }
+}
+
+# ========== PLEX (External) ==========
+
+md-chamberlain.com:32400 {
+    reverse_proxy http://192.168.1.34:32400
+
+    tls {
+        dns cloudflare {
+            api_token {$CLOUDFLARE_API_TOKEN}
+        }
+    }
+}
+
+# ========== Internal Services ==========
+
+pve2.md-chamberlain.com {
+    import local_only_https https://192.168.1.26:8006
+
+    tls {
+        dns cloudflare {
+            api_token {$CLOUDFLARE_API_TOKEN}
+        }
+    }
+}
+
+opnsense.md-chamberlain.com {
+    import local_only_https https://192.168.1.1:10443
+
+    tls {
+        dns cloudflare {
+            api_token {$CLOUDFLARE_API_TOKEN}
+        }
+    }
+}
+
+firefox.md-chamberlain.com {
+    import local_only_http http://192.168.1.6:5800
+
+    tls {
+        dns cloudflare {
+            api_token {$CLOUDFLARE_API_TOKEN}
+        }
+    }
+}
+
+pbx.md-chamberlain.com {
+    import local_only_http http://192.168.1.8
+
+    tls {
+        dns cloudflare {
+            api_token {$CLOUDFLARE_API_TOKEN}
+        }
+    }
+}
+
+invoice.md-chamberlain.com {
+    import local_only_https https://192.168.1.251
+
+    tls {
+        dns cloudflare {
+            api_token {$CLOUDFLARE_API_TOKEN}
+        }
+    }
+}
+
+adguard.md-chamberlain.com {
+    import local_only_http http://192.168.1.1:8080
+
+    tls {
+        dns cloudflare {
+            api_token {$CLOUDFLARE_API_TOKEN}
+        }
+    }
+}
