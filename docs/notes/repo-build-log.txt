@@ -1,0 +1,17 @@
+MD-Chamberlain Homelab Runbook — Repo Build Log
+==============================================
+
+Issue:
+- Git repo could NOT be initialized on /mnt/Main (network mount) due to chmod/permissions:
+  error: chmod on .../.git/config.lock failed: Operation not permitted
+  fatal: could not set 'core.filemode' to 'false'
+
+Resolution:
+- Keep the *actual* git working repo locally in the container:
+  /root/git/md-chamberlain-homelab
+- Use /mnt/Main only as a persistence/sync target (not a git working directory).
+
+Repo created:
+- /root/git/md-chamberlain-homelab
+- Branch: main
+- Added: README.md, .gitignore
