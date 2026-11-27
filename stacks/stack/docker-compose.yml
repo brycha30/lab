@@ -33,6 +33,7 @@ services:
       - "7880:7880"     # Radarr-directors (movies-directors)
       - "6767:6767"     # Bazarr
       - "6768:6768"     # Bazarr-kids
+      - "6769:6769"     # Bazarr-directors
       - "8191:8191"     # FlareSolverr
 
       # qB incoming (match qB settings)
@@ -174,6 +175,21 @@ services:
     volumes:
       - ${CONFIG_ROOT}/bazarr-kids:/config
       - ${MAIN}:/KidsMain
+    restart: unless-stopped
+    depends_on:
+      - gluetun
+
+  bazarr-directors:
+    image: lscr.io/linuxserver/bazarr:latest
+    network_mode: "service:gluetun"
+    environment:
+      - PUID=${PUID}
+      - PGID=${PGID}
+      - TZ=${TZ}
+      - BAZARR__PORT=6769
+    volumes:
+      - ${CONFIG_ROOT}/bazarr-directors:/config
+      - ${MAIN}:/Main
     restart: unless-stopped
     depends_on:
       - gluetun
