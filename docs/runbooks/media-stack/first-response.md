@@ -87,3 +87,13 @@ On November 27, host `find` showed *Gone Baby Gone*'s imported MP4 and the compl
 - [ ] Evaluate Usenet privacy, indexer/provider cost and retention before any subscription or migration; keep the existing VPN-bound torrent path working.
 
 The 17 stalled torrents seen at 00:40 EST were *The Guardian* season 1 episode downloads, not 17 unrelated failures. Several have partial data. Retain them per the owner's earlier direction and look for viable sources through Sonarr before treating them as cleanup candidates. The directors torrent was actively transferring at about 3 MiB/s. The TrueNAS UI returned a connection error, so no new pool-space claim was made.
+
+### Usenet decision note (November 27)
+
+Do not subscribe or enable a new download client yet. The existing VPN-bound torrent workflow is importing and hardlinking. A Usenet trial would require both a provider and an indexer, adding recurring cost and credentials. SABnzbd can use TLS to a provider (commonly port 563), but TLS alone still exposes the provider destination to the network; keep any future client in the existing Gluetun namespace if the owner's anonymity preference applies. Use a separate download category rooted under `/Main/media/.downloads/complete/usenet` on the same filesystem, then verify import and hardlink before making it a preferred downloader. Check certificate verification and avoid disabling it to work around errors.
+
+Provider pricing is fluid. On November 27, Newshosting publicly listed Lite at $10/month for 50 GB and Unlimited at $12.95/month on its site; UsenetServer described variable term pricing and 20 SSL connections. These are vendor claims, not a commitment or a complete cost comparison. Sources: https://www.newshosting.com/ , https://support.usenetserver.com/kb/article/176-how-much-does-the-service-cost/ , https://sabnzbd.org/wiki/extra/firewalls-and-virus-scanners , https://docs.linuxserver.io/images/docker-sabnzbd/ . Compare a provider, an indexer, cancellation terms, and actual completion on a small legal test before paying for a longer term.
+
+### Duplicate-folder audit
+
+A shallow scan of the three movie library roots found one folder with multiple video files: `UFC.310.Pantoja.vs.Asakura.PPV.1080p.WEB.h264-VERUM` under `/mnt/Main/media/movies`. It contains two 8,461,748,733-byte MKVs with different inodes (5237 and 5869), each link count 1, and matching modification time. The filenames differ. Content identity was not yet established, so neither was removed. Regular Radarr search did not show an existing `UFC 310` movie result. Compare content in bounded memory and verify Plex references before deleting one; this is potentially about 7.88 GiB of reclaimable apparent data, subject to snapshots.
