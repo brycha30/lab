@@ -79,9 +79,11 @@ On November 27, host `find` showed *Gone Baby Gone*'s imported MP4 and the compl
 - [x] Remove unwanted Kometa collections while preserving four `Delete Requests` collections; disable ordinary Kometa startup.
 - [x] Confirm *Apocalypto* English subtitle sidecar exists.
 - [ ] Test *The Dry* automatic deletion after the one-day grace period on November 28: Plex, Radarr, library file, completed torrent cleanup, and no exclusion. A follow-up is scheduled for 03:00 EST.
-- [x] Confirm *Kingdom of Heaven* Roadshow director's cut finished and replaced the tracked AAC edition in the directors library. The 17.2 GiB EAC3 file is correctly edition-named.\n- [ ] Check director playback and subtitles on Roku. The torrent data was removed after import; current link count 1 cannot establish whether the import originally hardlinked.
+- [x] Confirm *Kingdom of Heaven* Roadshow director's cut finished and replaced the tracked AAC edition in the directors library. The 17.2 GiB EAC3 file is correctly edition-named.
+- [ ] Check director playback and subtitles on Roku. The torrent data was removed after import; current link count 1 cannot establish whether the import originally hardlinked.
 - [ ] Reconcile the sanitized GitHub Compose with deployed production in full, including all paths, env variables and helper script. The branch now contains the helper service definitions, but the script is not yet tracked and the repository file remains a template. Validate `docker compose config` in a clean checkout before merging.
-- [x] Recheck TrueNAS pool: dashboard shows 24.18 TiB free and pool ONLINE on November 27.\n- [ ] Confirm snapshot and recycle retention against the pool trend after the deletion timer runs.
+- [x] Recheck TrueNAS pool: dashboard shows 24.18 TiB free and pool ONLINE on November 27.
+- [ ] Confirm snapshot and recycle retention against the pool trend after the deletion timer runs.
 - [ ] Review duplicate movie folders by Radarr instance and quality history, and inspect actual inode/link counts before reclaiming space. Do not remove a seeded hardlink until the library copy is verified.
 - [ ] Review remaining artwork and Roku audio/playback exceptions on actual clients.
 - [ ] Evaluate Usenet privacy, indexer/provider cost and retention before any subscription or migration; keep the existing VPN-bound torrent path working.
