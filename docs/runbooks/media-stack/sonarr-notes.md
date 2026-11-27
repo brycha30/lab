@@ -1,31 +1,9 @@
-# Sonarr Setup Notes (Runbook Placeholder)
+# Sonarr media workflow
 
-## Purpose
-TV automation for Plex library.
+Verified November 26, 2026. Sonarr runs in Docker VM 1033 (`dkr`, 192.168.1.33) on port 8989. The deployed Compose file is `/opt/dkr/stack/docker-compose.yml`. The container TV root `/Main/media/tv` maps to `/mnt/Main/media/tv` on the host. Sonarr configuration is under `/opt/dkr/config/sonarr`.
 
-## Access
-- URL: https://sonarr.md-chamberlain.com
-- Port: 8989 (typical)
+The download client and Sonarr mount the same TrueNAS filesystem. Let Sonarr import completed downloads and verify a hardlink by comparing device, inode, and link count. A move removes the download name and can stop seeding; a copy consumes additional space.
 
-## Container / Host
-- Runs in: Docker LXC 1031 (hostname: docker, IP 192.168.1.31)
+For duplicate episodes, compare series, season, episode, and multi-part identity with Sonarr's `EpisodeFiles` records. Six untracked single-episode copies beside tracked episodes were removed on November 26; the manifest is `/opt/dkr/config/tv-duplicate-cleanup-2026-11-26.json`. The Big C season 4 has separately tracked Part 1 and Part 2 files sharing episode labels; retain both. An older Shogun folder has overlapping untracked files that still need individual review.
 
-## Storage Paths
-- To be filled from conversation summaries:
-  - TV library path
-  - Downloads path
-  - Completed downloads handling
-
-## Quality / Profiles
-- To be filled:
-  - Direct Play targets (Roku / Samsung TV / Fire TV)
-  - Custom Formats and scoring
-  - Preferred codecs / audio
-
-## Indexers
-- To be filled:
-  - Jackett/Prowlarr integration
-  - Categories and tags
-
-## Notes
-- Add: final known-good settings once captured from summaries.
+If an import fails, inspect Sonarr Activity/Queue, qBittorrent category and completed path, permissions, and mount health before moving files manually. Do not bulk delete a folder because filenames repeat an episode number.
