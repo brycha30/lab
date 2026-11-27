@@ -26,3 +26,13 @@ Radarr, Sonarr, qBittorrent, Prowlarr, and Bazarr share Gluetun's network namesp
 The host `/mnt/Main` maps to `/Main` in Sonarr and regular Radarr. Kids and directors also use `/KidsMain` and `/DirMain`. Downloads and libraries must be on the same filesystem for hardlinks. Check device, inode, and link count before assuming an import was hardlinked.
 
 Back up app configuration before changing paths or databases. Do not commit the live `.env` or VPN keys. Avoid a broad `docker compose down` for a single service problem; it interrupts all media services.
+
+## Space accounting and watchlist check (November 26, 2026)
+
+TrueNAS `main_pool` showed 42.84 TiB usable, 23.91 TiB used, and 18.93 TiB available before cleanup. After deleting eleven daily snapshots of **only** `main_pool/Main/media` dated November 13–23, the dashboard showed about 18.94 TiB available and 23.86 TiB used. November 24–26 media snapshots remained. `main_pool/Main/torrents` is a separate dataset and its snapshots were not selected. The pool's free space is shared, so deleting media snapshots can increase space available to torrents without deleting torrents.
+
+Also removed 80 single-link media trash files totaling 2.82 GiB in apparent file size. A manifest on `dkr` is `/opt/dkr/config/media-trash-single-link-cleanup-2026-11-26.json`. File sizes and rounded pool numbers do not establish exact physical space reclaimed: hardlinks and snapshots can retain blocks. Measure the pool before and after a quiet interval with `zpool list -o name,size,alloc,free,freeing main_pool` and inspect dataset snapshots before further deletion.
+
+The Radarr recycle folder `/mnt/Main/.recycle-bin/movies` had about 154 GiB of recent single-link files. Radarr's seven-day recycle cleanup was configured; retain the recovery window while replacements import. Confirm which movie is tracked and playable before purging any recycle item. The recycle folder lives under `Main`, outside the `media` dataset.
+
+Regular Radarr now has a Plex Watchlist import list authenticated to the owner's Plex account. It adds movies under `/Main/media/movies` with `DirectPlay 1080p`; *The Conversation* (1974, TMDb 592) was added as a test and reached qBittorrent, category `movies-hl`, save path `/Main/media/.downloads/complete/movies`. At this writing it was queued with no metadata or bytes. Check completion, Radarr import, inode/link count, Plex availability, and whether the Plex Watchlist entry remains. The import list reads the watchlist; do not assume it removes entries after download. Plex's own automatic removal setting concerns playback of Plex Movies & Shows, not necessarily local library import.
