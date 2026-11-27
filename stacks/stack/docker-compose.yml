@@ -194,3 +194,30 @@ services:
     restart: unless-stopped
     depends_on:
       - gluetun
+
+  maintainerr:
+    image: ghcr.io/maintainerr/maintainerr:latest
+    network_mode: "service:gluetun"
+    volumes:
+      - ${CONFIG_ROOT}/maintainerr:/opt/data
+    restart: unless-stopped
+    depends_on:
+      gluetun:
+        condition: service_started
+        restart: true
+
+  watchlist-cleanup:
+    image: kometateam/kometa:latest
+    network_mode: "service:gluetun"
+    volumes:
+      - ${WATCHLIST_CLEANUP_ROOT}/watchlist-cleanup.py:/app/watchlist-cleanup.py:ro
+      - ${CONFIG_ROOT}/kometa/config.yml:/plex-config.yml:ro
+      - ${CONFIG_ROOT}/overseerr/db:/seerr:ro
+      - ${MAIN}/media:${MAIN}/media:ro
+      - ${KIDS_MAIN}/media:${KIDS_MAIN}/media:ro
+      - ${WATCHLIST_CLEANUP_ROOT}/state:/state
+    restart: unless-stopped
+    depends_on:
+      gluetun:
+        condition: service_started
+        restart: true
