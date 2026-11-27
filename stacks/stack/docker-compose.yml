@@ -198,8 +198,18 @@ services:
 
   maintainerr:
     image: ghcr.io/maintainerr/maintainerr:latest
+    container_name: maintainerr
     network_mode: "service:gluetun"
     user: "1000:1000"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options:
+        max-file: "2"
+        max-size: 5m
     environment:
       - TZ=${TZ}
     volumes:
@@ -212,7 +222,20 @@ services:
 
   watchlist-cleanup:
     image: kometateam/kometa:latest
+    container_name: watchlist-cleanup
     network_mode: "service:gluetun"
+    cap_drop:
+      - ALL
+    security_opt:
+      - no-new-privileges:true
+    read_only: true
+    tmpfs:
+      - /tmp
+    logging:
+      driver: json-file
+      options:
+        max-file: "2"
+        max-size: 5m
     entrypoint: ["python", "/app/watchlist-cleanup.py"]
     environment:
       - TZ=${TZ}
