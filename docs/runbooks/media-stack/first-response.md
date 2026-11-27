@@ -70,3 +70,20 @@ The active queue showed 37 Radarr records and qBittorrent showed 17 stalled down
 ### Subsequent verification
 
 On November 27, host `find` showed *Gone Baby Gone*'s imported MP4 and the completed torrent MP4 share device 44 and inode 38123, size 1,612,005,469 bytes, and link count 2. This confirms the import is a hardlink. The library also contains an `.srt` sidecar. *Apocalypto* (2006) has an `.en.srt` English subtitle sidecar beside its MKV under `/mnt/Main/media/movies/Apocalypto (2006) [tmdb-1579]`. These are filesystem checks; playback and subtitle rendering on Roku remain to be checked. All 14 services in the main media Compose project reported `running` at this check.
+
+## Completion checklist (November 27)
+
+- [x] Keep qBittorrent on Gluetun/tun0 and verify Mullvad exit; tune queue to 12 downloads / 25 torrents.
+- [x] Keep download and import paths on the same mounted filesystem; verify hardlinks for *The Conversation* and *Gone Baby Gone*.
+- [x] Restore Maintainerr and watchlist cleanup after Gluetun recreation; both now in the main Compose project.
+- [x] Remove unwanted Kometa collections while preserving four `Delete Requests` collections; disable ordinary Kometa startup.
+- [x] Confirm *Apocalypto* English subtitle sidecar exists.
+- [ ] Test *The Dry* automatic deletion after the one-day grace period on November 28: Plex, Radarr, library file, completed torrent cleanup, and no exclusion. A follow-up is scheduled for 03:00 EST.
+- [ ] Confirm *Kingdom of Heaven* Roadshow director's cut finishes, replaces the existing edition in the directors library, is correctly named and hardlinked, and plays with desired audio/subtitles. At this writing the torrent was 67% downloaded; the existing library file is an AAC edition.
+- [ ] Reconcile the sanitized GitHub Compose with deployed production in full, including all paths, env variables and helper script. The branch now contains the helper service definitions, but the script is not yet tracked and the repository file remains a template. Validate `docker compose config` in a clean checkout before merging.
+- [ ] Assess TrueNAS pool free space and snapshot/recycle behavior after allocation settles. Its browser UI showed a connection error during this pass; qBittorrent's 24.34 TiB mounted-path display is not a pool measurement.
+- [ ] Review duplicate movie folders by Radarr instance and quality history, and inspect actual inode/link counts before reclaiming space. Do not remove a seeded hardlink until the library copy is verified.
+- [ ] Review remaining artwork and Roku audio/playback exceptions on actual clients.
+- [ ] Evaluate Usenet privacy, indexer/provider cost and retention before any subscription or migration; keep the existing VPN-bound torrent path working.
+
+The 17 stalled torrents seen at 00:40 EST were *The Guardian* season 1 episode downloads, not 17 unrelated failures. Several have partial data. Retain them per the owner's earlier direction and look for viable sources through Sonarr before treating them as cleanup candidates. The directors torrent was actively transferring at about 3 MiB/s. The TrueNAS UI returned a connection error, so no new pool-space claim was made.
