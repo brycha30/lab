@@ -59,7 +59,7 @@ The Kometa container is stopped with restart policy `no`. Its standalone Compose
 
 Maintainerr and `watchlist-cleanup` had lived in separate Compose projects with `network_mode: container:gluetun`. When Gluetun was recreated, both retained a stale container namespace. On November 27 the deployed `/opt/dkr/stack/docker-compose.yml` was backed up as `docker-compose.before-helpers-20261127-002645.yml`, then both helpers were added to the main `stack` project with `network_mode: service:gluetun` and `depends_on.gluetun.restart: true`. The old standalone `compose.yml` files were renamed `compose.yml.retired`. The Gluetun container ID did not change during migration. Maintainerr is healthy; watchlist cleanup recovered and completed a cycle with no errors. Keep helpers in the main stack when changing the VPN service.
 
-The GitHub `stacks/stack/docker-compose.yml` is still an older sanitized template and does **not** match the full deployed Compose file. Reconcile it without copying live tokens, VPN keys, or application databases. The `watchlist-cleanup.py` script and its nonsecret deployment instructions also need a reviewed source home.
+The GitHub `stacks/stack/docker-compose.yml` is still an older sanitized template and does **not** match the full deployed Compose file. Reconcile it without copying live tokens, VPN keys, or application databases. The deployed `watchlist-cleanup.py` source and nonsecret deployment instructions were subsequently added to this branch; see the tracked-helper section below.
 
 ### Import verification (November 27, 2026)
 
@@ -81,7 +81,7 @@ On November 27, host `find` showed *Gone Baby Gone*'s imported MP4 and the compl
 - [ ] Test *The Dry* automatic deletion after the one-day grace period on November 28: Plex, Radarr, library file, completed torrent cleanup, and no exclusion. A follow-up is scheduled for 03:00 EST.
 - [x] Confirm *Kingdom of Heaven* Roadshow director's cut finished and replaced the tracked AAC edition in the directors library. The 17.2 GiB EAC3 file is correctly edition-named.
 - [ ] Check director playback and subtitles on Roku. The torrent data was removed after import; current link count 1 cannot establish whether the import originally hardlinked.
-- [ ] Reconcile the sanitized GitHub Compose with deployed production in full, including all paths, env variables and helper script. The branch now contains the helper service definitions, but the script is not yet tracked and the repository file remains a template. Validate `docker compose config` in a clean checkout before merging.
+- [ ] Reconcile the sanitized GitHub Compose with deployed production in full, including all paths, env variables and helper script. The branch now contains the helper service definitions and a byte-verified helper script, but the Compose file remains a template requiring populated restore variables. Validate `docker compose config` in a clean checkout before merging.
 - [x] Recheck TrueNAS pool: dashboard shows 24.18 TiB free and pool ONLINE on November 27.
 - [ ] Confirm snapshot and recycle retention against the pool trend after the deletion timer runs.
 - [ ] Review duplicate movie folders by Radarr instance and quality history, and inspect actual inode/link counts before reclaiming space. Do not remove a seeded hardlink until the library copy is verified.
