@@ -36,6 +36,7 @@ services:
       - "6769:6769"     # Bazarr-directors
       - "8191:8191"     # FlareSolverr
       - "5055:5055"     # Overseerr / Seerr
+      - "6246:6246"     # Maintainerr
 
       # qB incoming (match qB settings)
       - "6881:6881"        # TCP
