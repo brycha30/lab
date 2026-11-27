@@ -1,98 +1,28 @@
-# Docker Media Stack — First Response Playbook
+# Media stack first response
 
-## Applies To
-- Proxmox host: pve2
-- Docker LXC: 1031 (hostname: docker)
-- Plex LXC: 1034
-- Storage: TrueNAS via NFS (/mnt/Main)
+Verified November 26, 2026. Docker runs in Proxmox VM 1033 (`dkr`, 192.168.1.33), and Plex is at 192.168.1.35. The deployed media Compose file is `/opt/dkr/stack/docker-compose.yml`. TrueNAS is mounted on the Docker host at `/mnt/Main`.
 
-## Goal
-Quickly determine whether an outage is caused by:
-- Docker
-- The container itself
-- Storage (most common cause)
+## Check host and storage first
 
----
+```sh
+qm status 1033
+qm guest exec 1033 -- uptime
+qm guest exec 1033 -- df -h /mnt/Main/media
+```
 
-## Step 1 — Check container status (on Proxmox)
-Command:
-pct status 1031
-pct status 1034
+On `dkr`, check `findmnt /mnt/Main`, `df -h /mnt/Main/media`, and `docker ps`. If a storage operation hangs, investigate NAS and network I/O before restarting Docker.
 
-If containers are running but services are unreachable, continue.
+## Check the stack
 
----
+```sh
+cd /opt/dkr/stack
+docker compose config --quiet
+docker compose ps
+docker logs --tail=100 gluetun
+```
 
-## Step 2 — Enter the Docker container
-Command:
-pct enter 1031
+Radarr, Sonarr, qBittorrent, Prowlarr, and Bazarr share Gluetun's network namespace. When Gluetun is recreated, dependent containers can retain a stale namespace; recreate the affected services and verify their WebUIs. Seerr/Overseerr lives under `/opt/dkr/plex-plugins` and also depends on this namespace. Port 5055 must be published and allowed in Gluetun.
 
----
+The host `/mnt/Main` maps to `/Main` in Sonarr and regular Radarr. Kids and directors also use `/KidsMain` and `/DirMain`. Downloads and libraries must be on the same filesystem for hardlinks. Check device, inode, and link count before assuming an import was hardlinked.
 
-## Step 3 — Check for stuck I/O (MOST COMMON CAUSE)
-Command:
-ps -eo state,pid,comm,wchan:32 --sort=state | awk '$1 ~ /D/ {print}' | head -n 40
-
-If processes are in state "D":
-- DO NOT restart Docker yet
-
-Check kernel logs:
-dmesg -T | egrep -i "blocked for more than|cifs|smb|nfs|i/o error|reset|ext4|zfs" | tail -n 60
-
----
-
-## Step 4 — Verify mounts are healthy
-Command:
-findmnt -rno TARGET,SOURCE,FSTYPE,OPTIONS | egrep -i "nfs|cifs|smb|mnt/Main"
-df -hT | egrep -i "mnt|nfs|cifs|smb"
-
-Test responsiveness (these should return instantly):
-ls -lah /mnt/Main | head
-time ls -lah /mnt/Main/docker-projects >/dev/null
-
-If these hang → STORAGE OR NETWORK ISSUE.
-
----
-
-## Step 5 — Check Docker health
-Command:
-systemctl is-active docker
-docker ps
-docker info | head
-
----
-
-## Step 6 — Restart Docker (only if storage is healthy)
-Command:
-systemctl restart docker
-
-For a specific stack:
-cd /mnt/Main/docker-projects/<stack>
-docker compose down
-docker compose up -d
-
----
-
-## Step 7 — If the container itself is unresponsive
-From Proxmox host:
-pct exec 1031 -- uptime
-pct exec 1031 -- free -h
-pct exec 1031 -- df -hT
-
-If pct exec hangs → kernel I/O wait → storage/network problem.
-
----
-
-## Step 8 — LAST RESORT (storage confirmed broken)
-Command:
-umount -lf /mnt/Main
-mount -a
-
----
-
-## When Asking for Help
-Provide:
-1. pct status for 1031 and 1034
-2. Output showing D-state processes
-3. dmesg storage-related errors
-4. Whether ls /mnt/Main returns instantly or hangs
+Back up app configuration before changing paths or databases. Do not commit the live `.env` or VPN keys. Avoid a broad `docker compose down` for a single service problem; it interrupts all media services.
