@@ -198,6 +198,9 @@ services:
   maintainerr:
     image: ghcr.io/maintainerr/maintainerr:latest
     network_mode: "service:gluetun"
+    user: "1000:1000"
+    environment:
+      - TZ=${TZ}
     volumes:
       - ${CONFIG_ROOT}/maintainerr:/opt/data
     restart: unless-stopped
@@ -209,6 +212,9 @@ services:
   watchlist-cleanup:
     image: kometateam/kometa:latest
     network_mode: "service:gluetun"
+    entrypoint: ["python", "/app/watchlist-cleanup.py"]
+    environment:
+      - TZ=${TZ}
     volumes:
       - ${WATCHLIST_CLEANUP_ROOT}/watchlist-cleanup.py:/app/watchlist-cleanup.py:ro
       - ${CONFIG_ROOT}/kometa/config.yml:/plex-config.yml:ro
